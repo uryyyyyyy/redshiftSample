@@ -1,46 +1,42 @@
 package com.github.uryyyyyyy.redshift
 
+import com.typesafe.config.ConfigFactory
 import scalikejdbc._
-object Main2 {
+object Main {
 
 	def main(args: Array[String]) {
 
+		val config = ConfigFactory.load()
+
 		// initialize JDBC driver & connection pool
-		Class.forName("org.h2.Driver")
-		ConnectionPool.singleton("jdbc:h2:mem:hello", "user", "pass")
+		Class.forName(config.getString("driverClass"))
+		ConnectionPool.singleton(config.getString("dbUrl"), config.getString("dbUser"), config.getString("dbPass"))
 
-		// ad-hoc session provider on the REPL
-		implicit val session = AutoSession
+		val name = "Alice"
 
-		// table creation, you can run DDL by using #execute as same as JDBC
-		sql"""
+		val effect = DB localTx  { implicit session =>
+
+			sql"DROP TABLE IF EXISTS members".execute.apply()
+
+			sql"""
 create table members (
-  id serial not null primary key,
-  name varchar(64),
+  id BIGINT IDENTITY PRIMARY KEY,
+  name varchar(64) not null,
   created_at timestamp not null
 )
 """.execute.apply()
 
-		// insert initial data
-		Seq("Alice", "Bob", "Chris") foreach { name =>
-			sql"insert into members (name, created_at) values (${name}, current_timestamp)".update.apply()
+			sql"insert into members (name, created_at) values (${name}, 'now')"
+				.update.apply()
+
+			val memberId = sql"select id from members where name = ${name}" // don't worry, prevents SQL injection
+				.map(rs => rs.long("id")) // extracts values from rich java.sql.ResultSet
+				.single // single, list, traversable
+				.apply() // Side effect!!! runs the SQL using Connection
+
+			println(memberId)
 		}
 
-		// for now, retrieves all data as Map value
-		val entities: List[Map[String, Any]] = sql"select * from members".map(_.toMap).list.apply()
-
-		// find all members
-		val members: List[Member] = sql"select * from members".map(rs => Member(rs)).list.apply()
 	}
 
-}
-
-import org.joda.time._
-
-case class Member(id: Long, name: Option[String], createdAt: DateTime)
-
-object Member extends SQLSyntaxSupport[Member] {
-	override val tableName = "members"
-	def apply(rs: WrappedResultSet): Member = new Member(
-		rs.long("id"), rs.stringOpt("name"), rs.jodaDateTime("created_at"))
 }
