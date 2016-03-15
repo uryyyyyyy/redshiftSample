@@ -1,0 +1,32 @@
+
+{
+	"catdesc": "Major League Baseball",
+	"catid": 1,
+	"catgroup": "Sports",
+	"catname": "MLB"
+}
+{
+	"catgroup": "Sports",
+	"catid": 2,
+	"catname": "NHL",
+	"catdesc": "National Hockey League"
+}
+{
+	"catid": 3,
+	"catname": "NFL",
+	"catgroup": "Sports",
+	"catdesc": "National Football League"
+}
+{
+	"bogus": "Bogus Sports LLC",
+	"catid": 4,
+	"catgroup": "Sports",
+	"catname": "NBA",
+	"catdesc": "National Basketball Association"
+}
+{
+	"catid": 5,
+	"catgroup": "Shows",
+	"catname": "Musicals",
+	"catdesc": "All symphony, concerto, and choir concerts"
+}
