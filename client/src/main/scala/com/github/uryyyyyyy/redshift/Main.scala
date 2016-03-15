@@ -51,14 +51,15 @@ create table members (
 	def putToS3(file:File, key: String): Unit ={
 		val credentials = new BasicAWSCredentials(config.getString("awsAccessKey"), config.getString("awsSecretKey"))
 		val s3client = new AmazonS3Client(credentials)
-//		val gzippedFile = gzipFile(file)
+		val gzippedFile = gzipFile(file)
 
-//		val metadata = new ObjectMetadata()
-//		metadata.setContentType("text/plane")
-//		metadata.setContentEncoding("gzip")
-//		metadata.setContentLength(gzippedFile.length)
+		val metadata = new ObjectMetadata()
+		metadata.setContentType("text/plane")
+		metadata.setContentEncoding("gzip")
+		metadata.setContentLength(gzippedFile.length)
 
-		s3client.putObject(new PutObjectRequest(config.getString("s3Bucket"), key, file))
+		val byte = new ByteArrayInputStream(gzippedFile)
+		s3client.putObject(new PutObjectRequest(config.getString("s3Bucket"), key, byte, metadata))
 	}
 
 	def gzipFile(file:File):Array[Byte] = {
@@ -76,7 +77,7 @@ create table members (
 		val sql = s"""
 			 |COPY ${table} FROM 's3://${config.getString("s3Bucket")}/${key}'
 			 |CREDENTIALS 'aws_access_key_id=${config.getString("awsAccessKey")};aws_secret_access_key=${config.getString("awsSecretKey")}'
-			 |json 'auto';
+			 |json 'auto' gzip;
       """.stripMargin
 		println(sql)
 		SQL(sql).execute.apply()
