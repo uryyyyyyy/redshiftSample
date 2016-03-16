@@ -76,3 +76,18 @@ create jsons→18425 milliseconds
 upload jsons
 →188091 milliseconds
 →152528 milliseconds
+
+
+## run option
+
+AWS_ACCESS_KEY=""
+AWS_SECRET_KEY=""
+
+S3_BUCKET=""
+
+-Xms1G -Xmx3G
+
+S3_BUCKET=""
+DB_PASS=""
+DB_USER=""
+DB_URL=""

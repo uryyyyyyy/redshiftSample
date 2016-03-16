@@ -5,7 +5,7 @@ import java.io.PrintWriter
 import com.github.uryyyyyyy.redshift.Util
 import com.github.uryyyyyyy.redshift.stress_test.util.Utility
 
-object JsonJenerator {
+object JsonGenerator {
 
 	def main(args: Array[String]) {
 		Util.timeCounter(execute)

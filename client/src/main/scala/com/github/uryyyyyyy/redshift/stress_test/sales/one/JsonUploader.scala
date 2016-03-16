@@ -1,10 +1,8 @@
-package com.github.uryyyyyyy.redshift.stress_test.generator
+package com.github.uryyyyyyy.redshift.stress_test.sales.one
 
-import java.io.{File, PrintWriter}
+import java.io.File
 
 import com.github.uryyyyyyy.redshift.Util
-import com.github.uryyyyyyy.redshift.stress_test.util.Utility
-import scalikejdbc.DBSession
 
 object JsonUploader {
 
@@ -19,7 +17,7 @@ object JsonUploader {
 	def upload(count: Int): Unit ={
 		val file = new File(s"./jsonData/sales/one/${count}.json")
 		val fileName = s"${count}.json"
-		Util.putToS3(file, fileName, "sales/one/")
+		Util.putToS3(file, fileName, "redshift/sales/one/")
 	}
 
 }
