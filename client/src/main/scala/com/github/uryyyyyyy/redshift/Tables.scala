@@ -30,4 +30,22 @@ create table category (
 """.execute.apply()
 	}
 
+	def recreateSalesTable(implicit session:DBSession): Unit ={
+		sql"DROP TABLE IF EXISTS sales".execute.apply()
+
+		sql"""
+			 |create table sales(
+			 |salesid integer not null primary key,
+			 |listid integer not null distkey,
+			 |sellerid integer not null,
+			 |buyerid integer not null,
+			 |eventid integer not null encode mostly16,
+			 |dateid smallint not null,
+			 |qtysold smallint not null encode mostly8,
+			 |pricepaid decimal(8,2) encode delta32k,
+			 |commission decimal(8,2) encode delta32k,
+			 |saletime timestamp)
+""".execute.apply()
+	}
+
 }

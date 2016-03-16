@@ -17,14 +17,14 @@ object Util {
 	def copy(key:String, table:String)(implicit session:DBSession): Unit ={
 
 		val sql = s"""
-			           |COPY ${table} FROM 's3://${config.getString("s3Bucket")}/${key}'
+			           |COPY ${table} FROM 's3://${config.getString("s3Bucket")}/redshift/${key}'
 			           |CREDENTIALS 'aws_access_key_id=${config.getString("awsAccessKey")};aws_secret_access_key=${config.getString("awsSecretKey")}'
 			           |json 'auto' gzip
       """.stripMargin
 		SQL(sql).execute.apply()
 	}
 
-	def putToS3(file:File, key: String): Unit ={
+	def putToS3(file:File, fileName: String, path:String): Unit ={
 		val credentials = new BasicAWSCredentials(config.getString("awsAccessKey"), config.getString("awsSecretKey"))
 		val s3client = new AmazonS3Client(credentials)
 		val gzippedFile = gzipFile(file)
@@ -35,7 +35,7 @@ object Util {
 		metadata.setContentLength(gzippedFile.length)
 
 		val byte = new ByteArrayInputStream(gzippedFile)
-		s3client.putObject(new PutObjectRequest(config.getString("s3Bucket"), key, byte, metadata))
+		s3client.putObject(new PutObjectRequest(config.getString("s3Bucket"), path + fileName, byte, metadata))
 	}
 
 	def gzipFile(file:File):Array[Byte] = {

@@ -49,9 +49,9 @@ object BulkUploader {
 	}
 
 	def upload(count: Int)(implicit session:DBSession): Unit ={
-		val file = new File(s"/home/shiba/Documents/git/redshiftSample/client/jsonData/ten/${count}.json")
+//		val file = new File(s"/home/shiba/Documents/git/redshiftSample/client/jsonData/ten/${count}.json")
 		val fileName = s"sample_${count}.json"
-		Util.putToS3(file, fileName)
+//		Util.putToS3(file, fileName)
 		Util.copy(fileName, "category")
 	}
 

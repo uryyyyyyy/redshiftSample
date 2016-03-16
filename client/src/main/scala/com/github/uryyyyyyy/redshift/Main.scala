@@ -38,7 +38,7 @@ object Main {
 	def copySample(): Unit ={
 		val file = new File("/home/shiba/Documents/git/redshiftSample/client/jsonData/escapes.json")
 		val fileName = "escapes.json"
-		Util.putToS3(file, fileName)
+		Util.putToS3(file, fileName, "")
 
 		Class.forName(config.getString("driverClass"))
 		ConnectionPool.singleton(config.getString("dbUrl"), config.getString("dbUser"), config.getString("dbPass"))

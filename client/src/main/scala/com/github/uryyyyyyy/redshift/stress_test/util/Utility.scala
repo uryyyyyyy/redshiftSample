@@ -9,6 +9,10 @@ object Utility {
 		s"""{"catdesc": "${v}Major League Baseball","catid": ${v},"catgroup": "Sports","catname": "MLB"}""".stripMargin
 	}
 
+	def createSalesJson(v: Int): String = {
+		s"""{"salesid": ${v},"listid": ${v},"sellerid": 1,"buyerid": 10,"eventid": 10000,"dateid": 10,"qtysold": 10,"pricepaid": 1000,"commission": 1000, "saletime": "2008-02-15 04:05:00 PM"}""".stripMargin
+	}
+
 	def setup(implicit session:DBSession): Unit ={
 		Tables.recreateCategoryTable
 	}
